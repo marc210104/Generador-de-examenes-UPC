@@ -1,0 +1,707 @@
+%% This is examen.sty, a LaTeX style file written by Rafel Amer
+%% (rafel.amer AT upc.edu) for writing exams
+%%
+%% Copyright (C) 2004-2023 Rafel Amer
+%%
+%% It may be distributed and/or modified under the conditions
+%% of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%%
+%
+% Packages
+%
+\RequirePackage[T1]{fontenc}
+\RequirePackage{babel}
+\RequirePackage{microtype}
+\RequirePackage{ifthen}
+\RequirePackage{graphicx}
+\RequirePackage{float}
+\RequirePackage{fancyhdr}
+\RequirePackage{verbatim}
+\RequirePackage{array}
+%
+%
+%
+\newboolean{use@minion}
+\setboolean{use@minion}{false}
+\newboolean{use@palatino}
+\setboolean{use@palatino}{false}
+\newboolean{use@timesnewroman}
+\setboolean{use@timesnewroman}{false}
+\newboolean{use@timesstd}
+\setboolean{use@timesstd}{false}
+\newboolean{use@minister}
+\setboolean{use@minister}{false}
+\newboolean{use@century}
+\setboolean{use@century}{false}
+\newboolean{use@stix}
+\setboolean{use@stix}{false}
+\newboolean{use@xits}
+\setboolean{use@xits}{false}
+\newboolean{use@newcm}
+\setboolean{use@newcm}{false}
+\newboolean{use@erewhon}
+\setboolean{use@erewhon}{false}
+\newboolean{use@caflish}
+\setboolean{use@caflish}{false}
+\newboolean{use@mtpro}
+\setboolean{use@mtpro}{false}
+\newboolean{use@times}
+\setboolean{use@times}{false}
+\newboolean{use@apretat}
+\setboolean{use@apretat}{false}
+\newboolean{use@test}
+\setboolean{use@test}{false}
+\newboolean{use@asy}
+\setboolean{use@asy}{true}
+
+\DeclareOption{minion}{
+ \setboolean{use@minion}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{palatino}{
+ \setboolean{use@palatino}{true}
+ %%%% \catcode`\·=\active
+}
+\DeclareOption{timesnewroman}{
+ \setboolean{use@timesnewroman}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{timesstd}{
+ \setboolean{use@timesstd}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{minister}{
+ \setboolean{use@minister}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{century}{
+ \setboolean{use@century}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{stix}{
+ \setboolean{use@stix}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{xits}{
+ \setboolean{use@xits}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{newcm}{
+ \setboolean{use@newcm}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{erewhon}{
+ \setboolean{use@erewhon}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{caflish}{
+ \setboolean{use@caflish}{true}
+ \catcode`\·=\active
+}
+\DeclareOption{times}{
+ \setboolean{use@times}{true}
+}
+\DeclareOption{mtpro}{
+ \setboolean{use@mtpro}{true}
+}
+\DeclareOption{apretat}{
+ \setboolean{use@apretat}{true}
+}
+\DeclareOption{test}{
+ \setboolean{use@test}{true}
+}
+\DeclareOption{noasy}{
+ \setboolean{use@asy}{false}
+}
+%
+% Dades de l'alumne
+%
+\newboolean{nomicognoms}
+\setboolean{nomicognoms}{false}
+\newboolean{solucions}
+\setboolean{solucions}{false}
+\newboolean{canvipagina}
+\setboolean{canvipagina}{true}
+\newboolean{paraulasolucio}
+\setboolean{paraulasolucio}{true}
+%
+% Opci d'idioma del fitxer
+%
+\DeclareOption{ca}{
+ \def\solutionname{Soluci\'o}
+ \def\@data{\number\day\space\ifcase\month\or
+ de gener\or de febrer\or de mar\or d'abril\or de maig\or de juny\or
+ de juliol\or d'agost\or de setembre\or d'octubre\or de novembre\or
+ de desembre\fi\space de\space\number\year}
+ \def\modelname{Model}
+ \def\@curs{Curs}
+ \def\dataexamen#1#2#3{%
+ \def\@@tempnumer{#2}%
+ #1\space\ifcase\numexpr\@@tempnumer \or
+ de gener\or de febrer\or de març\or d'abril\or de maig\or de juny\or
+ de juliol\or d'agost\or de setembre\or d'octubre\or de novembre\or
+ de desembre\fi\space de\space #3}
+}
+\DeclareOption{es}{
+ \def\solutionname{Soluci\'on}
+ \def\@data{\number\day\space\ifcase\month\or
+ de enero\or de febrero\or de marzo\or de abril\or de mayo\or de junio\or
+ de julio\or de agosto\or de septiembre\or de octubre\or de noviembre\or
+ de diciembre\fi\space de\space\number\year}
+ \def\modelname{Modelo}
+ \def\@curs{Curso}
+ \def\dataexamen#1#2#3{%
+ \def\@@tempnumer{#2}%
+ #1\space\ifcase\numexpr\@@tempnumer \or
+ de enero\or de febrero\or de marzo\or de abril\or de mayo\or de junio\or
+ de julio\or de agosto\or de septiembre\or de octubre\or de noviembre\or
+ de diciembre\fi
+ \space de\space #3}
+}
+\DeclareOption{en}{
+ \def\solutionname{Solution}
+ \def\@data{\ifcase\month\or
+  January\or February\or March\or April\or May\or June\or
+  July\or August\or September\or October\or November\or December\fi
+  \space\number\day, \number\year}
+ \def\modelname{Model}
+ \def\@curs{Academic year}
+ \def\dataexamen#1#2#3{%
+ \def\@@tempnumer{#2}
+ \ifcase\numexpr\@@tempnumer \or
+ January\or February\or March\or April\or May\or June\or
+ July\or August\or September\or October\or November\or December\fi
+ \space #1,\space #3}
+}
+\DeclareOption{nic}{
+ \setboolean{nomicognoms}{true}
+ \setboolean{solucions}{false}
+ \voffset=-1.4in
+ \headheight=1.1in
+}
+\DeclareOption{NIC}{
+ \setboolean{nomicognoms}{true}
+ \setboolean{solucions}{false}
+ \voffset=-1.4in
+ \headheight=1.1in
+}
+\DeclareOption{sol}{
+ \setboolean{nomicognoms}{false}
+ \setboolean{solucions}{true}
+ \voffset=-0.8in
+ \headheight=0.9in
+}
+\DeclareOption{nicsol}{
+ \setboolean{nomicognoms}{true}
+ \setboolean{solucions}{true}
+ \setboolean{canvipagina}{false}
+ \voffset=-1.6in
+ \headheight=1.1in
+}
+\ProcessOptions\relax
+%
+% Test
+%
+\ifthenelse{\boolean{use@test}}{
+ \RequirePackage{draftwatermark}
+ \SetWatermarkText{Test}
+ \SetWatermarkScale{2.5}
+ \SetWatermarkAngle{65}
+ \SetWatermarkVerCenter{19cm}
+ \SetWatermarkLightness{0.9}
+}{}
+%
+% Apretat
+%
+\ifthenelse{\boolean{use@apretat}}{
+ \AtBeginDocument{
+  \setlength{\abovedisplayskip}{4pt minus 2 pt}
+  \setlength{\abovedisplayshortskip}{4pt minus 2 pt}
+  \setlength{\belowdisplayskip}{0pt minus 2 pt}
+  \setlength{\belowdisplayshortskip}{0pt minus 2 pt}
+ }
+}
+{
+ \AtBeginDocument{
+  \setlength{\abovedisplayskip}{8pt minus 2 pt}
+  \setlength{\abovedisplayshortskip}{8pt minus 2 pt}
+  \setlength{\belowdisplayskip}{8pt minus 2 pt}
+  \setlength{\belowdisplayshortskip}{8pt minus 2 pt}
+ }
+}
+%
+% Font
+%
+\ifthenelse{\boolean{use@times}\or\boolean{use@stix}\or\boolean{use@mtpro}\or\boolean{use@palatino}\or\boolean{use@timesnewroman}%
+\or\boolean{use@timesstd}\or\boolean{use@minion}\or\boolean{use@century}\or\boolean{use@newcm}\or\boolean{use@erewhon}\or\boolean{use@caflish}\or\boolean{use@minister}\or\boolean{use@xits}}
+{}
+{
+ \ifcsname directlua\endcsname
+  \setboolean{use@stix}{true}
+  \catcode`\·=\active
+ \else
+   \usepackage{tgheros,tgtermes}
+   \usepackage{newtxmath}
+ \fi
+}
+\ifthenelse{\boolean{use@times}}{
+ \ifcsname directlua\endcsname
+  \setboolean{use@stix}{true}
+  \setboolean{use@times}{false}
+  \catcode`\·=\active
+ \else
+  \usepackage{tgheros,tgtermes} 
+  \usepackage{newtxmath}
+ \fi
+}{}
+\ifthenelse{\boolean{use@mtpro}}{
+ \usepackage{times}
+ \usepackage[mtphrd]{mtpro2}
+}{}
+\ifthenelse{\boolean{use@minion}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{STIXTwoMath}
+ \setmainfont{MinionPro}[
+  Scale=1.1,
+  UprightFont={*-Regular},
+  BoldFont={*-Bold},
+  ItalicFont={*-It},
+  BoldItalicFont={*-BoldIt}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+\ifthenelse{\boolean{use@palatino}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{STIXTwoMath}
+ \setmainfont{PalatinoLTStd}[
+  Scale=1.1,
+  UprightFont={*-Roman},
+  BoldFont={*-Bold},
+  ItalicFont={*-Italic},
+  BoldItalicFont={*-BoldItalic},
+  SmallCapsFont={*-Roman},
+  SmallCapsFeatures={Letters=SmallCaps}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+\ifthenelse{\boolean{use@timesnewroman}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{STIXTwoMath}
+ \setmainfont{TimesNewRomanMTStd}[
+  Scale=1.1,
+  UprightFont={*},
+  BoldFont={*-Bold},
+  ItalicFont={*-Italic},
+  BoldItalicFont={*-BoldIt},
+  SmallCapsFont={*},
+  SmallCapsFeatures={Letters=SmallCaps}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+\ifthenelse{\boolean{use@timesstd}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{STIXTwoMath}
+ \setmainfont{TimesLTStd}[
+  Scale=1.1,
+  UprightFont={*-Roman},
+  BoldFont={*-Bold},
+  ItalicFont={*-Italic},
+  BoldItalicFont={*-BoldItalic},
+  SmallCapsFont={*-Roman},
+  SmallCapsFeatures={Letters=SmallCaps}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+\ifthenelse{\boolean{use@minister}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{STIXTwoMath}
+ \setmainfont{MinisterStd}[
+  Scale=1,
+  UprightFont={*-Light},
+  BoldFont={*-Bold},
+  ItalicFont={*-LightItalic},
+  BoldItalicFont={*-BoldItalic},
+  SmallCapsFont={*-Light},
+  SmallCapsFeatures={Letters=SmallCaps}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+\ifthenelse{\boolean{use@stix}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{STIXTwoMath}
+ \setmainfont{STIXTwoText}[
+  UprightFont={*-Regular},
+  BoldFont={*-Bold},
+  ItalicFont={*-Italic},
+  BoldItalicFont={*-BoldItalic}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+\ifthenelse{\boolean{use@xits}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{XITSMath-Regular}
+ \setmainfont{XITS}[
+  UprightFont={*-Regular},
+  BoldFont={*-Bold},
+  SmallCapsFont={*-Regular},
+  SmallCapsFeatures={Letters=SmallCaps}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+
+\ifthenelse{\boolean{use@century}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{STIXTwoMath}
+ \setmainfont{NewCenturySchlbkLTStd}[
+  Scale=0.95,
+  UprightFont={*-Roman},
+  BoldFont={*-Bd},
+  ItalicFont={*-It},
+  BoldItalicFont={*-BdIt},
+  SmallCapsFont={*-Roman},
+  SmallCapsFeatures={Letters=SmallCaps}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+
+\ifthenelse{\boolean{use@newcm}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmainfont{NewCM10-Book.otf}[
+  ItalicFont=NewCM10-BookItalic.otf,
+  BoldFont=NewCM10-Bold.otf,
+  BoldItalicFont=NewCM10-BoldItalic.otf,
+  SmallCapsFeatures={Numbers=OldStyle}]
+ \setsansfont{NewCMSans10-Book.otf}[
+  ItalicFont=NewCMSans10-BookOblique.otf,
+  BoldFont=NewCMSans10-Bold.otf,
+  BoldItalicFont=NewCMSans10-BoldOblique.otf,
+  SmallCapsFeatures={Numbers=OldStyle}]
+ \setmonofont{NewCMMono10-Book.otf}[
+  ItalicFont=NewCMMono10-BookItalic.otf,%
+  BoldFont=NewCMMono10-Bold.otf,%
+  BoldItalicFont=NewCMMono10-BoldOblique.otf,%
+  SmallCapsFeatures={Numbers=OldStyle}]
+ \setmathfont{NewCMMath-Book.otf}
+}{}
+
+\ifthenelse{\boolean{use@erewhon}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{STIXTwoMath}
+ \setmainfont{Erewhon}[
+  Scale=1.0,
+  UprightFont={*-Regular},
+  BoldFont={*-Bold},
+  ItalicFont={*-Italic},
+  BoldItalicFont={*-BoldItalic},
+  SmallCapsFont={*-Regular},
+  SmallCapsFeatures={Letters=SmallCaps}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+\ifthenelse{\boolean{use@caflish}}{
+ \usepackage{fontspec}
+ \usepackage{unicode-math}
+ \setmathfont{Latin Modern Math}
+ \setmainfont{CaflischScriptPro}[
+  Scale=1.3,
+  UprightFont={*-Regular},
+  BoldFont={*-Bold},
+  SmallCapsFont={*-Regular},
+  SmallCapsFeatures={Letters=SmallCaps}]
+ \setmathfont[range={\mathbb}]{TeX Gyre Pagella Math}
+}{}
+%
+%
+%
+\def\@@model{}
+\def\model#1{%
+ \def\@@tempm{#1}
+ \ifx\@@tempm\empty\gdef\@@model{}\else\gdef\@@model{\\ {\bfseries\textsf{\scriptsize{\modelname\space #1}}}}\fi
+}
+%
+% Logo
+%
+\def\scalelogo{0.45}
+\def\logoexamen{eseiaat-ma-otf.pdf}
+\def\@@logo[#1]#2{
+ \gdef\scalelogo{#1}
+ \gdef\logoexamen{#2}
+}
+\def\logo{\@ifnextchar[{\@@logo}{\@@logo[0.45]}}
+%
+% Asymptote
+%
+\ifthenelse{\boolean{use@asy}}
+{\RequirePackage{asymptote}}{}
+%
+% Data
+%
+\newcommand{\data}[1]{\gdef\@data{#1}}
+%
+% Composici de les pàgines
+%
+\textwidth=18.5cm
+\textheight=24cm
+\marginparsep=11pt
+\footskip=30pt
+\hoffset=-0.3in
+\topmargin=0pt
+\headsep=8pt
+\marginparwidth=55pt
+\oddsidemargin=0pt
+\evensidemargin=0pt
+\ifthenelse{\boolean{nomicognoms}}
+{
+\advance\headheight by 2.8cm
+\advance\textheight by -1.8cm
+}{}
+\parindent=0pt
+\parskip=4pt minus 1pt
+%
+% Logo de la UPC i del Departament
+%
+\newcommand{\eseiaat}{
+ \begin{minipage}[c]{8cm}
+ \begin{flushleft}
+ \setlength{\unitlength}{0.45cm}
+ \begin{picture}(16,4)
+ \put(-2,0.7){\makebox(0,0)[bl]{\includegraphics[scale=\scalelogo]{\logoexamen}}}
+ \end{picture}
+ \end{flushleft}
+ \end{minipage}
+}
+%
+% Determinació del quadrimestre
+%
+\def\quadrimestre#1{\gdef\@QU{Quadrimestre de #1}}
+\def\cuatrimestre#1{\gdef\@QU{Cuatrimestre de #1}}
+\def\curs#1{\gdef\@CU{Curs #1}}
+%
+% Nom, assignatura i data de l'examen
+%
+\gdef\@assignatura{}
+\def\assignatura#1{\gdef\@assignatura{#1}}
+\gdef\@examen{}
+\def\examen#1{\gdef\@examen{#1}}
+\def\data#1{\gdef\@data{#1}}
+\def\dadesassignatura{\begin{minipage}[c]{5cm}
+\vspace*{-0.5cm}
+\baselineskip=9pt
+\begin{center}
+{\bfseries\textsf{\scriptsize\@assignatura}}\\
+{\bfseries\textsf{\scriptsize\@CU}}\\
+{\bfseries\textsf{\scriptsize\@QU}}\\[2pt]
+{\bfseries\textsf{\scriptsize\@data}}\\
+{\bfseries\textsf{\scriptsize\@examen}}\@@model
+\end{center}
+\end{minipage}}
+%
+% Dades de l'alumne
+%
+\def\@@nom{}
+\def\nom#1{\gdef\@@nom{#1}}
+\def\@@cognoms{}
+\def\cognoms#1{\gdef\@@cognoms{#1}}
+\def\dadesalumne{\begin{minipage}[c]{17.75cm}
+\baselineskip=8pt
+\vspace*{3.5cm}
+\begin{center}
+\textbf{Cognoms}: \framebox[9cm][l]{\rule[-4pt]{0pt}{18pt}\textsf{\@@cognoms}}
+\hfill\textbf{Nom}: \framebox[5cm][l]{\rule[-4pt]{0pt}{18pt}\textsf{\@@nom}}
+\end{center}
+\end{minipage}}
+%
+%
+% Capçaleres
+%
+\lhead{\eseiaat}
+\ifthenelse{\boolean{nomicognoms}}
+{\chead{\dadesalumne}}
+{\chead{}}
+\rhead{\dadesassignatura}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\pagestyle{fancy}
+%
+% Enunciats de les preguntes i apartats
+%
+\newcounter{@apartats}
+\newcounter{enunciats}
+
+\def\entrylabel#1{\hbox to 2em{\hfill\textbf{#1. }}}
+\renewcommand\theenunciats{\arabic{enunciats}}
+
+\newenvironment{enunciat}
+{\setcounter{@apartats}{0}\addtocounter{enunciats}{1}
+ \let\@currentlabel\theenunciats
+ \begin{list}{\theenunciats}
+ {\labelsep0.6em\labelwidth2em\itemindent0pt\leftmargin0em%
+  \parsep 5pt plus 1pt\topsep=0pt}
+ \renewcommand{\makelabel}{\entrylabel}
+ \item
+}%
+{
+ \end{list}
+ \par
+ \vspace{0pt}
+}
+
+\newenvironment{apartats}
+{
+ \ifthenelse{\boolean{use@apretat}}{\vspace{-1pt}}{}
+ \begin{list}{\llap{\hss(\alph{@apartats})\hspace{0.5em}}}
+ {\usecounter{@apartats}\leftmargin 2.2em\labelsep 0pt\labelwidth 16pt
+ \listparindent 0pt\parsep 0pt\itemsep 0pt\topsep -12pt}
+}
+{
+ \end{list}
+ \par
+ \vspace{12pt}
+}
+
+\newenvironment{opcions}
+{
+ \vspace{-1pt}
+ \begin{list}{\llap{\hss\large$\square$\hspace{0.5em}}}
+ {\leftmargin 2.2em\labelsep 0pt\labelwidth 16pt
+ \listparindent 0pt\parsep 4pt\itemsep 0pt\topsep 0pt}
+}
+{
+ \end{list}
+ \par
+ \vspace{0pt}
+}
+
+\renewenvironment{itemize}
+{\begin{list}{$\bullet$}
+{\usecounter{@apartats}\leftmargin 3.2em\labelsep 1em\labelwidth 8pt
+\listparindent 0pt\parsep 4pt\itemsep 0pt\topsep 0pt}}
+{\end{list}}
+
+%
+% Solucions de les preguntes
+%
+\newenvironment{solucio@i}%
+{
+ \par\vspace{-2mm}\nopagebreak
+ \ifparaulasolucio \textbf{Solució}\par\fi
+}
+{
+ \par\vspace{0cm}
+}
+%
+\newenvironment{observacio@i}%
+{\par\vspace{8ptminus 1pt}\begingroup\bfseries}%
+{\endgroup\par\vspace{8ptminus 1pt}}
+%
+\newenvironment{historia@i}%
+{\vfill\vspace{8ptminus 1pt}\begingroup\parskip=2pt plus 1pt minus 1pt\scriptsize}%
+{\endgroup}
+%
+\newenvironment{quadricula@i}
+{\begin{center}}
+{\end{center}\vspace{0cm}}
+%
+\ifthenelse{\boolean{solucions}}
+{\let\solucio\solucio@i%
+ \let\endsolucio\endsolucio@i
+ \let\historia\comment
+ \let\endhistoria\endcomment
+ \let\observacio\comment
+ \let\endobservacio\endcomment
+ \let\quadricula\comment
+ \let\endquadricula\endcomment
+}
+{\let\solucio\comment
+ \let\endsolucio\endcomment
+ \let\historia\historia@i
+ \let\endhistoria\endhistoria@i
+ \let\observacio\observacio@i
+ \let\endobservacio\endobservacio@i
+ \let\quadricula\quadricula@i
+ \let\endquadricula\endquadricula@i
+}
+%
+\let\@@@newpage\newpage
+\let\newproblem\newpage
+\ifthenelse{\boolean{canvipagina}}{}{\def\newproblem{}}
+\def\newpage{\setcounter{enunciats}{0}\@@@newpage}
+%
+% Tipus de columna
+%
+\newcolumntype{C}[2]{>{\vbox to #2\bgroup\vfill\arraybackslash}p{#1}<{\centering\vskip-\baselineskip\vfill\egroup}}
+\newcolumntype{L}[2]{>{\vbox to #2\bgroup\vfill\arraybackslash}p{#1}<{\vskip-\baselineskip\vfill\egroup}}
+%
+% Taules i matrius
+%
+\tabcolsep=8pt
+\arrayrulewidth=0.5pt
+\doublerulesep=0.5pt
+\renewcommand{\arraystretch}{1.3}
+%
+\renewcommand{\matrix}{\begingroup%
+\renewcommand{\arraystretch}{1}%
+\hskip -0.5\arraycolsep\array}
+\renewcommand{\endmatrix}{\endarray\endgroup}
+%
+\renewcommand{\pmatrix}{\left(\matrix}
+\renewcommand{\endpmatrix}{\endmatrix\!\right)}
+\renewcommand{\vmatrix}{\left|\matrix}
+\renewcommand{\endvmatrix}{\endmatrix\!\right|}
+%
+% Nombres reals, enters, naturals, etc. Lletres caligrfiques.
+%
+\renewcommand{\cal}[1]{{\mathcal #1}}
+\newcommand{\rn}[1]{{\mathbb R}^{#1}}
+\newcommand{\deufrac}[2]{\scalebox{0.85}{\hbox{\ensuremath{\dfrac{#1}{#2}}}}}
+\DeclareMathOperator{\rang}{rang}
+%
+% Ela geminada
+%
+\def\elageminada{%
+  \leftllkern=0pt\rightllkern=0pt\raiselldim=0pt%
+  \setbox0\hbox{l}\setbox1\hbox{l\/}\setbox2\hbox{.}%
+  \advance\raiselldim by \the\fontdimen5\the\font
+  \advance\raiselldim by -\ht2%
+  \leftllkern=-.25\wd0%
+  \advance\leftllkern by \wd1%
+  \advance\leftllkern by -\wd0%
+  \rightllkern=-.25\wd0%
+  \advance\rightllkern by -\wd1%
+  \advance\rightllkern by \wd0%
+  \allowhyphens\discretionary{-}{}%
+  {\hbox{}\kern\leftllkern\raise\raiselldim\hbox{.}%
+   \kern\rightllkern\hbox{}}\allowhyphens}
+\def\ELAgeminada{%
+  \leftllkern=0pt\rightllkern=0pt\raiselldim=0pt%
+  \setbox0\hbox{L}\setbox1\hbox{L\/}\setbox2\hbox{.}%
+  \advance\raiselldim by .5\ht0%
+  \advance\raiselldim by -.5\ht2%
+  \leftllkern=-.125\wd0%
+  \advance\leftllkern by \wd1%
+  \advance\leftllkern by -\wd0%
+  \rightllkern=-\wd0%
+  \divide\rightllkern by 6%
+  \advance\rightllkern by -\wd1%
+  \advance\rightllkern by \wd0%
+  \allowhyphens\discretionary{-}{}%
+  {\hbox{}\kern\leftllkern\raise\raiselldim\hbox{.}%
+   \kern\rightllkern\hbox{}}\allowhyphens}
+\ifthenelse{\boolean{use@palatino}}{}{
+ \ifcsname directlua\endcsname\catcode`\·\active\fi
+ \def·#1{%
+ \def\ela{l}%
+ \def\ELA{L}%
+ \def\mybox{#1}%
+ \ifmmode%
+  \cdot #1%
+ \else%
+  \ifx\mybox\ela\elageminada\else%
+  \ifx\mybox\ELA\ELAgeminada\else%x
+ \fi\fi #1%
+ \fi}}
+\AtEndDocument{\ifcsname directlua\endcsname\catcode`\·=11\fi}
